@@ -41,7 +41,4 @@
 		and version = #{version}
 	</update>
 	
-	
-	
-
 </mapper>

@@ -15,8 +15,6 @@ import com.artisan.redpacket.service.UserRedPacketService;
 @Service
 public class UserRedPacketServiceImpl implements UserRedPacketService {
 
-	// private Logger logger =
-	// LoggerFactory.getLogger(UserRedPacketServiceImpl.class);
 
 	@Autowired
 	private UserRedPacketDao userRedPacketDao;
