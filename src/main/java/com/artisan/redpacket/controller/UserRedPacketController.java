@@ -29,5 +29,16 @@ public class UserRedPacketController {
 		return retMap;
 	}
 	
+	@RequestMapping(value = "/grapRedPacketForVersion")
+	@ResponseBody
+	public Map<String, Object> grapRedPacketForVersion(Long redPacketId, Long userId) {
+		// ÇÀºì°ü
+		int result = userRedPacketService.grapRedPacketForVersion(redPacketId, userId);
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		boolean flag = result > 0;
+		retMap.put("success", flag);
+		retMap.put("message", flag ? "ÇÀºì°ü³É¹¦" : "ÇÀºì°üÊ§°Ü");
+		return retMap;
+	}
 	
 }
