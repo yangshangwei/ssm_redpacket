@@ -30,8 +30,10 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	public int grapRedPacket(Long redPacketId, Long userId) {
-		// 获取红包信息
-		RedPacket redPacket = redPacketDao.getRedPacket(redPacketId);
+		// 获取红包信息 -并发存在超发
+		// RedPacket redPacket = redPacketDao.getRedPacket(redPacketId);
+		// 获取红包信息 -悲观锁的实现方式
+		RedPacket redPacket = redPacketDao.getRedPacketForUpdate(redPacketId);
 		int leftRedPacket = redPacket.getStock();
 		// 当前小红包库存大于0
 		if (leftRedPacket > 0) {
