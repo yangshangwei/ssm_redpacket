@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--scan: 当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。 -->
+<!-- scanPeriod设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。
+	注意扫描间隔要加上单位，可用的单位是 milliseconds，seconds，minutes 和 hours。如果只指定了数字，但没有指定单位，这默认单位为 milliseconds。-->
+<!--debug当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+	
+	<!--  用来定义变量值，它有两个属性name和value，通过<property>定义的值会被插入到logger上下文中，可以使“${}”来使用变量-->
+	<property name="app.name" value="ssm_redpacket_db" /> 
+	<property name="log.level" value="DEBUG"/>
+	<property name="log.maxHistory" value="30"/>
+	<!--<property name="log.filePath" value="${catalina.base}/logs/webapps"/>  -->
+	<property name="log.filePath" value="D:/${app.name}/logs"/>
+	<!--格式化输出,%d:日期;%thread:线程名;%-5level：级别,从左显示5个字符宽度;%msg:日志消息;%n:换行符-->
+	<property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+	
+	
+	<!-- 用来设置上下文名称，每个logger都关联到logger上下文，默认上下文名称为default。但可以使用<contextName>设置成其他名字，用于区分不同应用程序的记录。一旦设置，不能修改。 -->
+	<contextName>${app.name}</contextName> 
+	
+	<!-- 子节点<appender>：负责写日志的组件，它有两个必要属性name和class。name指定appender名称，class指定appender的全限定名 -->
+	
+	<!-- 控制台设置 -->
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- 对记录事件进行格式化 encoder默认配置为PartternLayoutEncoder    -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<patten>${log.pattern}</patten>
+		</encoder>
+	</appender>
+
+
+	<!-- DEBUG -->
+	<appender name="debugAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- file被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。 -->
+		<file>${log.filePath}/debug.log</file>
+		<!-- append如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。 -->
+		<append>true</append>
+		
+		<!-- rollingPolicy当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名。 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.filePath}/debug/debug.%d{yyyy-MM-dd}.%i.log.zip
+			</fileNamePattern>
+			<!--日志保存天数 -->
+			<maxHistory>${log.maxHistory}</maxHistory>
+			<!--滚动策略:日志文件大于1MB时生成一个新的日志文件，每天生成一个新的日志文件 -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>1MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		
+		<!-- 日志格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<!-- filter 只记录debug信息 
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">   
+     		 <level>DEBUG</level>   
+    		 <onMatch>ACCEPT</onMatch>   
+     		 <onMismatch>DENY</onMismatch>   
+   		</filter> 
+   		--> 
+	</appender>
+	
+	
+	<!-- INFO -->
+	<appender name="infoAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- file被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。 -->
+		<file>${log.filePath}/info.log</file>
+		<!-- append如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。 -->
+		<append>true</append>
+		
+		<!-- rollingPolicy当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名。 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.filePath}/info/info.%d{yyyy-MM-dd}.%i.log.zip
+			</fileNamePattern>
+			<!--日志保存天数 -->
+			<maxHistory>${log.maxHistory}</maxHistory>
+			<!--滚动策略:日志文件大于1MB时生成一个新的日志文件，每天生成一个新的日志文件 -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>1MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		
+		<!-- 日志格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<!-- filter 只记录info信息 
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		-->
+	</appender>
+	
+	<!-- ERROR -->
+	<appender name="errorAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- file被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。 -->
+		<file>${log.filePath}/error.log</file>
+		<!-- append如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。 -->
+		<append>true</append>
+		
+		<!-- rollingPolicy当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名。 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.filePath}/error/error.%d{yyyy-MM-dd}.%i.log.zip
+			</fileNamePattern>
+			<!--日志保存天数 -->
+			<maxHistory>${log.maxHistory}</maxHistory>
+			<!--滚动策略:日志文件大于1MB时生成一个新的日志文件，每天生成一个新的日志文件 -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>1MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		
+		<!-- 日志格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<!-- filter 只记录error信息
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		 -->
+	</appender>
+	
+	 <!--打印特定包下的日志  
+		additivity：是否向上级logger传递打印信息。默认是true. 作用在于 children-logger是否使用 rootLogger配置的appender进行输出。
+		false：表示只用当前logger的appender-ref。
+		true：表示当前logger的appender-ref和rootLogger的appender-ref都有效。
+		
+	 -->
+	<logger name="com.artisan.redpacket" level="${log.level}" additivity="true">
+		<appender-ref ref="debugAppender" />
+		<appender-ref ref="infoAppender" />
+		<appender-ref ref="errorAppender" />
+	</logger>
+	
+	<!--  【日志输出级别】   表示把>=DEBUG级别的日志都输出到debugAppender对应的file -->
+	<root level="${log.level}">
+		<appender-ref ref="consoleAppender" />
+	</root>
+</configuration>
