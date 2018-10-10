@@ -12,6 +12,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerAdapter;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan(value="com.*", includeFilters= {@Filter(type = FilterType.ANNOTATION, value = Controller.class)})
 //∆Ù∂ØSpring MVC≈‰÷√
 @EnableWebMvc
+@EnableAsync
 public class WebConfig extends AsyncConfigurerSupport { 
 
 	/***
